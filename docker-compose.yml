@@ -1,0 +1,87 @@
+# A linha 'version' foi removida para seguir o aviso do seu log
+services:
+  # Banco de Dados (do desafio original)
+  postgres:
+    image: postgres:15
+    container_name: godlevel-db
+    environment:
+      POSTGRES_DB: challenge_db
+      POSTGRES_USER: challenge
+      POSTGRES_PASSWORD: challenge_2024
+    ports:
+      - "5432:5432" # Expõe o DB para debug local
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database-schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U challenge -d challenge_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nola-network
+
+  # Gerador de Dados (do desafio original)
+  data-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile.data-generator # Aponta para o Dockerfile renomeado
+    container_name: godlevel-data-gen
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://challenge:challenge_2024@postgres:5432/challenge_db
+    command: >
+      sh -c "
+        echo 'Waiting for database to be ready...' &&
+        sleep 5 &&
+        echo 'Generating challenge data...' &&
+        python generate_data.py --db-url postgresql://challenge:challenge_2024@postgres:5432/challenge_db
+      "
+    networks:
+      - nola-network
+    profiles:
+      - tools 
+
+  # Backend (Node.js API)
+  backend:
+    build:
+      context: ./backend # O diretório que criamos
+      dockerfile: Dockerfile
+    container_name: godlevel-backend
+    ports:
+      - "3001:3001" 
+    environment:
+      - PORT=3001
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=challenge
+      - DB_PASSWORD=challenge_2024
+      - DB_DATABASE=challenge_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - nola-network
+
+  # Frontend (React App)
+  frontend:
+    build:
+      context: . 
+      dockerfile: Dockerfile.frontend # Aponta para o Dockerfile renomeado
+    container_name: godlevel-frontend
+    ports:
+      - "8081:80" # Acessa o app em http://localhost:8080
+    depends_on:
+      - backend 
+    networks:
+      - nola-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  nola-network:
+    driver: bridge
