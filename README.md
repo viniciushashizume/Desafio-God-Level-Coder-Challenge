@@ -8,11 +8,11 @@
 
 ---
 
-<h2>⚙️ Como Funciona</h2>
+<h2> Como Funciona</h2>
 
 <p>O sistema é composto por quatro componentes principais que trabalham em conjunto:</p>
 
-<h3>🖥️ Frontend (<code>/src</code>)</h3>
+<h3>Frontend (<code>/src</code>)</h3>
 <ul>
   <li>Interface web moderna construída com <strong>React</strong>, <strong>Vite</strong> e <strong>TypeScript</strong>.</li>
   <li>UI desenvolvida com <strong>shadcn-ui</strong> e <strong>Tailwind CSS</strong>.</li>
@@ -28,7 +28,7 @@
   <li>Servido por um contêiner <strong>Nginx</strong>, que também atua como proxy reverso para o backend.</li>
 </ul>
 
-<h3>🧠 Backend (<code>/backend</code>)</h3>
+<h3> Backend (<code>/backend</code>)</h3>
 <ul>
   <li>API RESTful desenvolvida em <strong>Node.js</strong> com <strong>Express.js</strong>.</li>
   <li>Conexão com o banco de dados via <strong>Knex.js</strong> (query builder).</li>
@@ -36,7 +36,7 @@
   <li>Rotas separadas para <em>metadados</em> (filtros) e páginas específicas do dashboard.</li>
 </ul>
 
-<h3>🗄️ Banco de Dados (<code>database-schema.sql</code>)</h3>
+<h3> Banco de Dados (<code>database-schema.sql</code>)</h3>
 <ul>
   <li>Banco <strong>PostgreSQL</strong> rodando em contêiner dedicado.</li>
   <li>Schema modelado para operações de restaurante, incluindo tabelas para:
@@ -44,7 +44,7 @@
   </li>
 </ul>
 
-<h3>🧩 Gerador de Dados (<code>generate_data.py</code>)</h3>
+<h3> Gerador de Dados (<code>generate_data.py</code>)</h3>
 <ul>
   <li>Script em <strong>Python</strong> que utiliza <strong>Faker</strong> e <strong>psycopg2</strong> para gerar dados realistas e massivos.</li>
   <li>Popula o banco com lojas, produtos, clientes e vendas (com padrões sazonais e horários de pico).</li>
@@ -53,15 +53,15 @@
 
 ---
 
-<h2>🚀 Como Usar</h2>
+<h2> Como Usar</h2>
 
-<h3>📋 Pré-requisitos</h3>
+<h3> Pré-requisitos</h3>
 <ul>
   <li><a href="https://www.docker.com/">Docker</a></li>
   <li><a href="https://docs.docker.com/compose/">Docker Compose</a> (geralmente incluído no Docker Desktop)</li>
 </ul>
 
-<h3>🧭 Passo a Passo (Docker)</h3>
+<h3> Passo a Passo (Docker)</h3>
 
 <ol>
   <li><strong>Clone o Repositório</strong><br>
@@ -84,13 +84,13 @@ cd nola-dashboard
 
   <li><strong>Acesse o Dashboard</strong><br>
     Após os dados serem gerados, acesse o sistema em:<br>
-    👉 <a href="http://localhost:8081" target="_blank">http://localhost:8081</a>
+     <a href="http://localhost:8081" target="_blank">http://localhost:8081</a>
   </li>
 </ol>
 
 ---
 
-<h2>🧰 Tecnologias Utilizadas</h2>
+<h2> Tecnologias Utilizadas</h2>
 
 <h3>Frontend</h3>
 <ul>
