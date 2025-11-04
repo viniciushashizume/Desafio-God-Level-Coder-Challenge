@@ -1,73 +1,121 @@
-# Welcome to your Lovable project
+Projeto: Dashboard Analítico de Restaurante (Nola)
 
-## Project info
+Este repositório contém o código-fonte de um dashboard analítico full-stack para gerenciamento de restaurantes. O projeto utiliza um frontend moderno em React para visualização de dados e um backend em Node.js (Express) para processar e servir os dados a partir de um banco de dados PostgreSQL.
 
-**URL**: https://lovable.dev/projects/7769139a-401c-4a9d-9434-5827788e2f09
+O sistema é totalmente containerizado usando Docker Compose, permitindo que toda a pilha (frontend, backend, banco de dados e um gerador de dados) seja iniciada com um único comando.
 
-## How can I edit this code?
+Como Funciona
 
-There are several ways of editing your application.
+O sistema é composto por quatro componentes principais que trabalham em conjunto:
 
-**Use Lovable**
+    Frontend (/src)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/7769139a-401c-4a9d-9434-5827788e2f09) and start prompting.
+        Uma interface web interativa construída com React, Vite e TypeScript.
 
-Changes made via Lovable will be committed automatically to this repo.
+        Utiliza shadcn-ui e Tailwind CSS para os componentes de UI.
 
-**Use your preferred IDE**
+        Exibe dados analíticos em quatro páginas principais: Vendas (Visão Geral), Produtos, Clientes e Operacional.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+        Renderiza gráficos e métricas usando Recharts e gerencia o estado da API com React Query.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+        É servido por um contêiner Nginx, que também atua como proxy reverso para o backend.
 
-Follow these steps:
+    Backend (/backend)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+        Uma API RESTful construída em Node.js e Express.js.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+        Conecta-se ao banco de dados PostgreSQL usando o query builder Knex.js.
 
-# Step 3: Install the necessary dependencies.
-npm i
+        Expõe endpoints (ex: /api/v1/analytics/dashboard) que executam consultas SQL complexas (agregações, joins, filtros) para calcular KPIs e preparar dados para os gráficos.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+        Fornece rotas separadas para metadados (filtros) e para cada página do dashboard.
 
-**Edit a file directly in GitHub**
+    Banco de Dados (database-schema.sql)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+        Um banco de dados PostgreSQL rodando em seu próprio contêiner Docker.
 
-**Use GitHub Codespaces**
+        O schema é complexo e modelado para operações de restaurante, incluindo tabelas para sales, products, customers, stores, channels, payments, e mais.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+    Gerador de Dados (generate_data.py)
 
-## What technologies are used for this project?
+        Um script Python que utiliza as bibliotecas Faker e psycopg2 para gerar dados realistas e massivos.
 
-This project is built with:
+        Popula o banco de dados PostgreSQL com lojas, produtos, clientes e meses de dados de vendas, incluindo padrões sazonais e horários de pico.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+        Este script é executado como um serviço separado no Docker Compose para popular o banco após sua inicialização.
 
-## How can I deploy this project?
+Como Usar
 
-Simply open [Lovable](https://lovable.dev/projects/7769139a-401c-4a9d-9434-5827788e2f09) and click on Share -> Publish.
+Siga os passos abaixo para configurar e executar o projeto completo usando Docker.
 
-## Can I connect a custom domain to my Lovable project?
+Pré-requisitos
 
-Yes, you can!
+    Docker
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+    Docker Compose (geralmente incluído na instalação do Docker Desktop)
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Guia Passo a Passo (Docker)
+
+    Clone o Repositório Clone este projeto para sua máquina local.
+
+    Construa e Inicie os Contêineres Abra um terminal na raiz do projeto (onde o arquivo docker-compose.yml está localizado) e execute o seguinte comando. Isso irá construir as imagens do frontend e backend e iniciar os serviços postgres, backend e frontend.
+    Bash
+
+docker-compose up -d --build
+
+Popule o Banco de Dados O banco de dados iniciará vazio. Para preenchê-lo com dados de exemplo, você deve executar o serviço data-generator. Em um terminal separado (na mesma pasta), rode o comando:
+Bash
+
+    docker-compose run --rm data-generator
+
+    Nota: Este serviço é definido com profiles: [tools] no docker-compose.yml, por isso não é iniciado automaticamente. Você deve executá-lo manualmente. O script pode levar alguns minutos para gerar todos os dados.
+
+    Acesse o Dashboard Após os dados serem gerados, a aplicação estará pronta para uso. Abra seu navegador e acesse: http://localhost:8081
+
+Tecnologias Utilizadas
+
+    Frontend:
+
+        React
+
+        Vite
+
+        TypeScript
+
+        Tailwind CSS
+
+        shadcn-ui
+
+        Recharts (Gráficos)
+
+        React Query (Gerenciamento de API)
+
+        React Router (Roteamento)
+
+    Backend:
+
+        Node.js
+
+        Express.js
+
+        Knex.js (Query Builder)
+
+        PostgreSQL (Driver pg)
+
+    Banco de Dados:
+
+        PostgreSQL
+
+    Geração de Dados:
+
+        Python
+
+        Faker
+
+        psycopg2
+
+    DevOps:
+
+        Docker & Docker Compose
+
+        Nginx (Servidor Web & Proxy Reverso)
