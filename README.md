@@ -132,26 +132,3 @@ cd nola-dashboard
 
 ---
 
-<h2>📦 Estrutura do Projeto</h2>
-
-<pre>
-📁 nola-dashboard/
-├── 📂 backend/              # API Node.js com Express e Knex
-├── 📂 src/                  # Frontend React + Vite + Tailwind
-├── 📂 scripts/              # Scripts utilitários e geradores de dados
-├── 🐘 database-schema.sql   # Estrutura do banco PostgreSQL
-├── 🐳 docker-compose.yml    # Configuração dos contêineres
-└── 📄 README.md
-</pre>
-
----
-
-<h2>💡 Observações</h2>
-<ul>
-  <li>O projeto é modular e permite expansão fácil de novas páginas ou endpoints.</li>
-  <li>Ideal para estudos de arquitetura full-stack, visualização de dados e integração com Docker.</li>
-</ul>
-
----
-
-<h2 align="center">📊 Desenvolvido com 💙 para análise inteligente de restaurantes</h2>
