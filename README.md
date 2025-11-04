@@ -1,121 +1,157 @@
-Projeto: Dashboard Analítico de Restaurante (Nola)
+<h1 align="center">🍽️ Dashboard Analítico de Restaurante (Nola)</h1>
 
-Este repositório contém o código-fonte de um dashboard analítico full-stack para gerenciamento de restaurantes. O projeto utiliza um frontend moderno em React para visualização de dados e um backend em Node.js (Express) para processar e servir os dados a partir de um banco de dados PostgreSQL.
+<p align="center">
+  Este repositório contém o código-fonte de um <strong>dashboard analítico full-stack</strong> para gerenciamento de restaurantes.
+  O sistema combina <strong>React</strong> no frontend, <strong>Node.js (Express)</strong> no backend e <strong>PostgreSQL</strong> como banco de dados.
+  Tudo é containerizado via <strong>Docker Compose</strong>, permitindo inicialização completa com um único comando.
+</p>
 
-O sistema é totalmente containerizado usando Docker Compose, permitindo que toda a pilha (frontend, backend, banco de dados e um gerador de dados) seja iniciada com um único comando.
+---
 
-Como Funciona
+<h2>⚙️ Como Funciona</h2>
 
-O sistema é composto por quatro componentes principais que trabalham em conjunto:
+<p>O sistema é composto por quatro componentes principais que trabalham em conjunto:</p>
 
-    Frontend (/src)
+<h3>🖥️ Frontend (<code>/src</code>)</h3>
+<ul>
+  <li>Interface web moderna construída com <strong>React</strong>, <strong>Vite</strong> e <strong>TypeScript</strong>.</li>
+  <li>UI desenvolvida com <strong>shadcn-ui</strong> e <strong>Tailwind CSS</strong>.</li>
+  <li>Exibe dados analíticos em quatro páginas principais:
+    <ul>
+      <li><strong>Vendas</strong> (Visão Geral)</li>
+      <li><strong>Produtos</strong></li>
+      <li><strong>Clientes</strong></li>
+      <li><strong>Operacional</strong></li>
+    </ul>
+  </li>
+  <li>Utiliza <strong>Recharts</strong> para gráficos e <strong>React Query</strong> para gerenciamento de estado da API.</li>
+  <li>Servido por um contêiner <strong>Nginx</strong>, que também atua como proxy reverso para o backend.</li>
+</ul>
 
-        Uma interface web interativa construída com React, Vite e TypeScript.
+<h3>🧠 Backend (<code>/backend</code>)</h3>
+<ul>
+  <li>API RESTful desenvolvida em <strong>Node.js</strong> com <strong>Express.js</strong>.</li>
+  <li>Conexão com o banco de dados via <strong>Knex.js</strong> (query builder).</li>
+  <li>Endpoints disponíveis, como <code>/api/v1/analytics/dashboard</code>, executam consultas SQL complexas (joins, filtros, agregações).</li>
+  <li>Rotas separadas para <em>metadados</em> (filtros) e páginas específicas do dashboard.</li>
+</ul>
 
-        Utiliza shadcn-ui e Tailwind CSS para os componentes de UI.
+<h3>🗄️ Banco de Dados (<code>database-schema.sql</code>)</h3>
+<ul>
+  <li>Banco <strong>PostgreSQL</strong> rodando em contêiner dedicado.</li>
+  <li>Schema modelado para operações de restaurante, incluindo tabelas para:
+    <strong>sales</strong>, <strong>products</strong>, <strong>customers</strong>, <strong>stores</strong>, <strong>channels</strong> e <strong>payments</strong>.
+  </li>
+</ul>
 
-        Exibe dados analíticos em quatro páginas principais: Vendas (Visão Geral), Produtos, Clientes e Operacional.
+<h3>🧩 Gerador de Dados (<code>generate_data.py</code>)</h3>
+<ul>
+  <li>Script em <strong>Python</strong> que utiliza <strong>Faker</strong> e <strong>psycopg2</strong> para gerar dados realistas e massivos.</li>
+  <li>Popula o banco com lojas, produtos, clientes e vendas (com padrões sazonais e horários de pico).</li>
+  <li>Executado como serviço separado no Docker Compose para inicializar o banco automaticamente.</li>
+</ul>
 
-        Renderiza gráficos e métricas usando Recharts e gerencia o estado da API com React Query.
+---
 
-        É servido por um contêiner Nginx, que também atua como proxy reverso para o backend.
+<h2>🚀 Como Usar</h2>
 
-    Backend (/backend)
+<h3>📋 Pré-requisitos</h3>
+<ul>
+  <li><a href="https://www.docker.com/">Docker</a></li>
+  <li><a href="https://docs.docker.com/compose/">Docker Compose</a> (geralmente incluído no Docker Desktop)</li>
+</ul>
 
-        Uma API RESTful construída em Node.js e Express.js.
+<h3>🧭 Passo a Passo (Docker)</h3>
 
-        Conecta-se ao banco de dados PostgreSQL usando o query builder Knex.js.
+<ol>
+  <li><strong>Clone o Repositório</strong><br>
+    <pre><code>git clone https://github.com/seuusuario/nola-dashboard.git
+cd nola-dashboard
+</code></pre>
+  </li>
 
-        Expõe endpoints (ex: /api/v1/analytics/dashboard) que executam consultas SQL complexas (agregações, joins, filtros) para calcular KPIs e preparar dados para os gráficos.
+  <li><strong>Construa e Inicie os Contêineres</strong><br>
+    Abra o terminal na raiz do projeto e execute:
+    <pre><code>docker-compose up -d --build</code></pre>
+    Isso irá construir as imagens do frontend e backend, além de iniciar os serviços <code>postgres</code>, <code>backend</code> e <code>frontend</code>.
+  </li>
 
-        Fornece rotas separadas para metadados (filtros) e para cada página do dashboard.
+  <li><strong>Popule o Banco de Dados</strong><br>
+    O banco é iniciado vazio. Para gerar dados de exemplo, execute o serviço gerador:
+    <pre><code>docker-compose run --rm data-generator</code></pre>
+    <em>Nota:</em> Este serviço é definido com <code>profiles: [tools]</code> no <code>docker-compose.yml</code>, por isso deve ser executado manualmente.
+  </li>
 
-    Banco de Dados (database-schema.sql)
+  <li><strong>Acesse o Dashboard</strong><br>
+    Após os dados serem gerados, acesse o sistema em:<br>
+    👉 <a href="http://localhost:8081" target="_blank">http://localhost:8081</a>
+  </li>
+</ol>
 
-        Um banco de dados PostgreSQL rodando em seu próprio contêiner Docker.
+---
 
-        O schema é complexo e modelado para operações de restaurante, incluindo tabelas para sales, products, customers, stores, channels, payments, e mais.
+<h2>🧰 Tecnologias Utilizadas</h2>
 
-    Gerador de Dados (generate_data.py)
+<h3>Frontend</h3>
+<ul>
+  <li>React</li>
+  <li>Vite</li>
+  <li>TypeScript</li>
+  <li>Tailwind CSS</li>
+  <li>shadcn-ui</li>
+  <li>Recharts (gráficos)</li>
+  <li>React Query (gerenciamento de API)</li>
+  <li>React Router (roteamento)</li>
+</ul>
 
-        Um script Python que utiliza as bibliotecas Faker e psycopg2 para gerar dados realistas e massivos.
+<h3>Backend</h3>
+<ul>
+  <li>Node.js</li>
+  <li>Express.js</li>
+  <li>Knex.js (Query Builder)</li>
+  <li>pg (Driver PostgreSQL)</li>
+</ul>
 
-        Popula o banco de dados PostgreSQL com lojas, produtos, clientes e meses de dados de vendas, incluindo padrões sazonais e horários de pico.
+<h3>Banco de Dados</h3>
+<ul>
+  <li>PostgreSQL</li>
+</ul>
 
-        Este script é executado como um serviço separado no Docker Compose para popular o banco após sua inicialização.
+<h3>Geração de Dados</h3>
+<ul>
+  <li>Python</li>
+  <li>Faker</li>
+  <li>psycopg2</li>
+</ul>
 
-Como Usar
+<h3>DevOps</h3>
+<ul>
+  <li>Docker & Docker Compose</li>
+  <li>Nginx (Servidor Web & Proxy Reverso)</li>
+</ul>
 
-Siga os passos abaixo para configurar e executar o projeto completo usando Docker.
+---
 
-Pré-requisitos
+<h2>📦 Estrutura do Projeto</h2>
 
-    Docker
+<pre>
+📁 nola-dashboard/
+├── 📂 backend/              # API Node.js com Express e Knex
+├── 📂 src/                  # Frontend React + Vite + Tailwind
+├── 📂 scripts/              # Scripts utilitários e geradores de dados
+├── 🐘 database-schema.sql   # Estrutura do banco PostgreSQL
+├── 🐳 docker-compose.yml    # Configuração dos contêineres
+└── 📄 README.md
+</pre>
 
-    Docker Compose (geralmente incluído na instalação do Docker Desktop)
+---
 
-Guia Passo a Passo (Docker)
+<h2>💡 Observações</h2>
+<ul>
+  <li>O projeto é modular e permite expansão fácil de novas páginas ou endpoints.</li>
+  <li>Ideal para estudos de arquitetura full-stack, visualização de dados e integração com Docker.</li>
+</ul>
 
-    Clone o Repositório Clone este projeto para sua máquina local.
+---
 
-    Construa e Inicie os Contêineres Abra um terminal na raiz do projeto (onde o arquivo docker-compose.yml está localizado) e execute o seguinte comando. Isso irá construir as imagens do frontend e backend e iniciar os serviços postgres, backend e frontend.
-    Bash
-
-docker-compose up -d --build
-
-Popule o Banco de Dados O banco de dados iniciará vazio. Para preenchê-lo com dados de exemplo, você deve executar o serviço data-generator. Em um terminal separado (na mesma pasta), rode o comando:
-Bash
-
-    docker-compose run --rm data-generator
-
-    Nota: Este serviço é definido com profiles: [tools] no docker-compose.yml, por isso não é iniciado automaticamente. Você deve executá-lo manualmente. O script pode levar alguns minutos para gerar todos os dados.
-
-    Acesse o Dashboard Após os dados serem gerados, a aplicação estará pronta para uso. Abra seu navegador e acesse: http://localhost:8081
-
-Tecnologias Utilizadas
-
-    Frontend:
-
-        React
-
-        Vite
-
-        TypeScript
-
-        Tailwind CSS
-
-        shadcn-ui
-
-        Recharts (Gráficos)
-
-        React Query (Gerenciamento de API)
-
-        React Router (Roteamento)
-
-    Backend:
-
-        Node.js
-
-        Express.js
-
-        Knex.js (Query Builder)
-
-        PostgreSQL (Driver pg)
-
-    Banco de Dados:
-
-        PostgreSQL
-
-    Geração de Dados:
-
-        Python
-
-        Faker
-
-        psycopg2
-
-    DevOps:
-
-        Docker & Docker Compose
-
-        Nginx (Servidor Web & Proxy Reverso)
+<h2 align="center">📊 Desenvolvido com 💙 para análise inteligente de restaurantes</h2>
