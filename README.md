@@ -1,4 +1,4 @@
-<h1 align="center">🍽️ Dashboard Analítico de Restaurante (Nola)</h1>
+<h1 align="center"> Dashboard Analítico para Redes de Restaurantes</h1>
 
 <p align="center">
   Este repositório contém o código-fonte de um <strong>dashboard analítico full-stack</strong> para gerenciamento de restaurantes.
